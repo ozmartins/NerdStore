@@ -1,1 +1,1 @@
-NerdStore
+Project created durign course "Modelando Domínios Ricos" on the Desenvolvedor.io website.
