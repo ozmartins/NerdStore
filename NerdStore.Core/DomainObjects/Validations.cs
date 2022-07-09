@@ -1,22 +1,22 @@
 ﻿namespace NerdStore.Core.DomainObjects
 {
     public static class Validations
-    {
-        public static void ExceptionIfEqual(this object object1, object object2, string message)
-        {
-            if (object1 == object2)
-                throw new Exception(message);
-        }
+    {        
         public static void ExceptionIfNull(this object object1, string message)
         {
             if (object1 is null)
                 throw new Exception(message);
         }
 
-
         public static void ExceptionIfEmpty(this string text, string message)
         {
-            if (String.IsNullOrWhiteSpace(text))
+            if (string.IsNullOrWhiteSpace(text))
+                throw new Exception(message);
+        }
+
+        public static void ExceptionIfEmpty(this Guid guid, string message)
+        {
+            if (guid.Equals(Guid.Empty))
                 throw new Exception(message);
         }
 

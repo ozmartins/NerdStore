@@ -1,8 +1,9 @@
 ﻿using FluentAssertions;
+using NerdStore.Catalog.Domain.Entities;
 using System;
 using Xunit;
 
-namespace NerdStore.Catalog.Domain.Test
+namespace NerdStore.Catalog.Domain.Test.Entities
 {
     public class ProductTest
     {
@@ -63,7 +64,7 @@ namespace NerdStore.Catalog.Domain.Test
             product.Description.Should().Be("Description");
             product.Image.Should().Be("Image");
             product.Price.Should().Be(1);
-            product.QuantityInInventory.Should().Be(2);
+            product.Quantity.Should().Be(2);
             product.Dimensions.Height.Should().Be(3);
             product.Dimensions.Width.Should().Be(4);
             product.Dimensions.Depth.Should().Be(5);

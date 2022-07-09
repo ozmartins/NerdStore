@@ -1,8 +1,9 @@
 ﻿using FluentAssertions;
+using NerdStore.Catalog.Domain.Entities;
 using System;
 using Xunit;
 
-namespace NerdStore.Catalog.Domain.Test
+namespace NerdStore.Catalog.Domain.Test.Entities
 {
     public class CategoryTest
     {

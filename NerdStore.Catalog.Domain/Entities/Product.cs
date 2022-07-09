@@ -1,6 +1,6 @@
 ﻿using NerdStore.Core.DomainObjects;
 
-namespace NerdStore.Catalog.Domain
+namespace NerdStore.Catalog.Domain.Entities
 {
     public class Product : Entity, IAggregateRoot
     {
@@ -9,7 +9,7 @@ namespace NerdStore.Catalog.Domain
         public string Image { get; private set; }
         public bool Active { get; private set; }
         public decimal Price { get; private set; }        
-        public int QuantityInInventory { get; private set; }
+        public int Quantity { get; private set; }
         public DateTime CreateDate { get; private set; }
         public Dimensions Dimensions { get; set; }
         public Category Category { get; set; }
@@ -22,7 +22,7 @@ namespace NerdStore.Catalog.Domain
             Price = price;
             CreateDate = DateTime.Now;
             Image = image;
-            QuantityInInventory = quantityInInventory;
+            Quantity = quantityInInventory;
             Dimensions = dimensions;
             Category = category;
             
@@ -51,19 +51,19 @@ namespace NerdStore.Catalog.Domain
             if (!HasEnoughtInInventory(quantity)) 
                 throw new Exception($"There are not enough items in inventory.");
             
-            QuantityInInventory -= quantity;
+            Quantity -= quantity;
         }
 
         public void IncreaseInventory(int quantity)
         {
             ValidateQuantity(quantity);
 
-            QuantityInInventory += quantity;
+            Quantity += quantity;
         }
 
         public bool HasEnoughtInInventory(int quantity)
         {
-            return QuantityInInventory >= quantity;
+            return Quantity >= quantity;
         }
 
         public void Validate()
@@ -73,7 +73,7 @@ namespace NerdStore.Catalog.Domain
             Price.ExceptionIfLessThan(0.01m, "Price must to be greater than zero.");
 
             ValidateDescription(Description);
-            ValidateQuantity(QuantityInInventory);
+            ValidateQuantity(Quantity);
             ValidateCategory(Category);
         }
 
@@ -90,7 +90,7 @@ namespace NerdStore.Catalog.Domain
         public void ValidateCategory(Category category)
         {
             category.ExceptionIfNull("Category can't be empty.");
-            category.Id.ExceptionIfEqual(Guid.Empty, "Category Id can't be empty.");
+            category.Id.ExceptionIfEmpty("Category Id can't be empty.");
         }
     }
 }
