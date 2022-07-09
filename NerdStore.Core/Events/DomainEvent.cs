@@ -6,7 +6,7 @@ namespace NerdStore.Core.Events
     {
         public string Type { get; private set; }
         public Guid AggregateId { get; private set; }
-        public DateTime TimeStamp { get; private set; }
+        public DateTime TimeStamp { get; private set; }        
 
         public DomainEvent(Guid aggregateId)
         {

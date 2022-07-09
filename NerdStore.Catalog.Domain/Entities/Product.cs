@@ -44,17 +44,17 @@ namespace NerdStore.Catalog.Domain.Entities
             description.ExceptionIfEmpty("Description can't be empty.");
             Description = description;
         }
-        public void DecreaseInventory(int quantity)
+        public void WithdrawFromStock(int quantity)
         {
             ValidateQuantity(quantity);
 
             if (!HasEnoughtInInventory(quantity)) 
-                throw new Exception($"There are not enough items in inventory.");
+                throw new Exception("There are not enough items in inventory.");
             
             Quantity -= quantity;
         }
 
-        public void IncreaseInventory(int quantity)
+        public void ReplenishStock(int quantity)
         {
             ValidateQuantity(quantity);
 

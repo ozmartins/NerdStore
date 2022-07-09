@@ -56,7 +56,7 @@ namespace NerdStore.Catalog.Domain.Test.Entities
         }
 
         [Fact]
-        public void CreateValidProducto()
+        public void CreateValidProduct()
         {
             var product = new Product("Name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(6, "Test"));
 
@@ -70,6 +70,59 @@ namespace NerdStore.Catalog.Domain.Test.Entities
             product.Dimensions.Depth.Should().Be(5);
             product.Category.Code.Should().Be(6);
             product.Category.Name.Should().Be("Test");
+        }        
+
+        [Fact]
+        public void DeactivateActivateProduct()
+        {
+            var product = new Product("Name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(6, "Test"));
+
+            product.Deactivate();
+            product.Active.Should().Be(false);
+
+            product.Activate();
+            product.Active.Should().Be(true);
+        }
+
+        [Fact]
+        public void ChangeDescriptionUsingInvalidDescription()
+        {
+            var product = new Product("Name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(6, "Test"));
+
+            var exception = Assert.Throws<Exception>(() => product.ChangeDescription(string.Empty));
+
+            exception.Message.Should().Be("Description can't be empty.");
+        }
+
+        [Fact]
+        public void ChangeDescriptionUsingValidDescription()
+        {
+            var product = new Product("Name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(6, "Test"));
+
+            product.ChangeDescription("New description");
+
+            product.Description.Should().Be("New description");
+        }
+
+        [Fact]
+        public void ChangeCategoryUsingNullCategory()
+        {
+            var product = new Product("Name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(6, "Test"));
+
+            var exception = Assert.Throws<Exception>(() => product.ChangeCategory(null!));
+
+            exception.Message.Should().Be("Category can't be empty.");
+        }
+
+        [Fact]
+        public void ChangeCategoryUsingValidCategory()
+        {
+            var product = new Product("Name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(6, "Test"));
+
+            product.ChangeCategory(new Category(7, "New category"));
+
+            product.Category.Code.Should().Be(7);
+            product.Category.Name.Should().Be("New category");
         }
     }
 }

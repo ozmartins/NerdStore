@@ -2,9 +2,9 @@
 
 namespace NerdStore.Core.Events
 {
-    public class DomainEventManager
+    public class DomainEventManager : IDomainEventManager
     {
-        private readonly IMediator _mediator;
+        private readonly IMediator _mediator;        
 
         public DomainEventManager(IMediator mediator)
         {

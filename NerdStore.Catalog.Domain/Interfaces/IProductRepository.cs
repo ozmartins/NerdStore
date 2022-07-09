@@ -1,7 +1,7 @@
 ﻿using NerdStore.Catalog.Domain.Entities;
 using NerdStore.Core.Data;
 
-namespace NerdStore.Catalog.Domain
+namespace NerdStore.Catalog.Domain.Interfaces
 {
     public interface IProductRepository : IRepository<Product>
     {
