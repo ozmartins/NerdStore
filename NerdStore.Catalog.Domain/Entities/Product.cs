@@ -13,16 +13,17 @@ namespace NerdStore.Catalog.Domain.Entities
         public DateTime CreateDate { get; private set; }
         public Dimensions Dimensions { get; set; }
         public Category Category { get; set; }
-
-        public Product(string name, string description, string image, decimal price, int quantityInInventory, Dimensions dimensions, Category category)
+        
+        public Product(Guid id, string name, string description, string image, decimal price, int quantityInStock, Dimensions dimensions, Category category)
         {
+            Id = id;
             Name = name;
             Description = description;
             Active = true;
             Price = price;
             CreateDate = DateTime.Now;
             Image = image;
-            Quantity = quantityInInventory;
+            Quantity = quantityInStock;
             Dimensions = dimensions;
             Category = category;
             
@@ -49,7 +50,7 @@ namespace NerdStore.Catalog.Domain.Entities
             ValidateQuantity(quantity);
 
             if (!HasEnoughtInInventory(quantity)) 
-                throw new Exception("There are not enough items in inventory.");
+                throw new DomainException("There are not enough items in inventory.");
             
             Quantity -= quantity;
         }
@@ -68,6 +69,7 @@ namespace NerdStore.Catalog.Domain.Entities
 
         public void Validate()
         {
+            Id.ExceptionIfEmpty("ID can't be empty.");
             Name.ExceptionIfEmpty("Name can't be empty.");
             Image.ExceptionIfEmpty("Image can't be empty.");
             Price.ExceptionIfLessThan(0.01m, "Price must to be greater than zero.");
@@ -91,6 +93,27 @@ namespace NerdStore.Catalog.Domain.Entities
         {
             category.ExceptionIfNull("Category can't be empty.");
             category.Id.ExceptionIfEmpty("Category Id can't be empty.");
+        }
+
+        public override bool Equals(object? obj)
+        {
+            var product = (Product)obj!;
+
+            return Id.Equals(product.Id) &&
+                   Name.Equals(product.Name) &&
+                   Description.Equals(product.Description) &&
+                   Image.Equals(product.Image) &&
+                   Active == product.Active &&
+                   Price == product.Price &&
+                   Quantity == product.Quantity &&
+                   CreateDate == product.CreateDate &&
+                   Dimensions.Equals(product.Dimensions) &&
+                   Category.Equals(product.Category);
+        }
+
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
         }
     }
 }

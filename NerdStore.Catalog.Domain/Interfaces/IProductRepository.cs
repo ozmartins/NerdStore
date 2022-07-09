@@ -16,5 +16,7 @@ namespace NerdStore.Catalog.Domain.Interfaces
         void Add(Product product);
 
         void Update(Product product);
+
+        void Add(Category category);        
     }
 }

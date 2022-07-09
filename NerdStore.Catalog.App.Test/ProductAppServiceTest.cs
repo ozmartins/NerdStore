@@ -1,6 +1,5 @@
 using FluentAssertions;
 using Moq;
-using NerdStore.Catalog.Domain;
 using NerdStore.Catalog.Domain.Entities;
 using NerdStore.Catalog.Domain.Interfaces;
 using System;
@@ -16,9 +15,9 @@ namespace NerdStore.Catalog.App.Test
         {            
             var products = new List<Product> 
             { 
-                new Product("Name 1", "Description 1", "Image 1", 001, 002, new Dimensions(003,004,005), new Category(006, "Category 1")),
-                new Product("Name 2", "Description 2", "Image 2", 010, 020, new Dimensions(030,040,050), new Category(060, "Category 2")),
-                new Product("Name 3", "Description 3", "Image 3", 100, 200, new Dimensions(300,400,500), new Category(600, "Category 3")),
+                new Product(Guid.NewGuid(),"Name 1", "Description 1", "Image 1", 001, 002, new Dimensions(003,004,005), new Category(Guid.NewGuid(),006, "Category 1")),
+                new Product(Guid.NewGuid(),"Name 2", "Description 2", "Image 2", 010, 020, new Dimensions(030,040,050), new Category(Guid.NewGuid(),060, "Category 2")),
+                new Product(Guid.NewGuid(),"Name 3", "Description 3", "Image 3", 100, 200, new Dimensions(300,400,500), new Category(Guid.NewGuid(),600, "Category 3")),
             };
 
             var productRepositoryMock = new Mock<IProductRepository>();
@@ -34,7 +33,7 @@ namespace NerdStore.Catalog.App.Test
         [Fact]
         public async void GetByIdTest()
         {
-            var product = new Product("Name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(6, "Category"));            
+            var product = new Product(Guid.NewGuid(), "Name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(Guid.NewGuid(), 6, "Category"));            
 
             var productRepositoryMock = new Mock<IProductRepository>();
             productRepositoryMock.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(product);
@@ -51,9 +50,9 @@ namespace NerdStore.Catalog.App.Test
         {
             var products = new List<Product>
             {
-                new Product("Name 1", "Description 1", "Image 1", 001, 002, new Dimensions(003,004,005), new Category(006, "Category 1")),
-                new Product("Name 2", "Description 2", "Image 2", 010, 020, new Dimensions(030,040,050), new Category(060, "Category 2")),
-                new Product("Name 3", "Description 3", "Image 3", 100, 200, new Dimensions(300,400,500), new Category(600, "Category 3")),
+                new Product(Guid.NewGuid(),"Name 1", "Description 1", "Image 1", 001, 002, new Dimensions(003,004,005), new Category(Guid.NewGuid(),006, "Category 1")),
+                new Product(Guid.NewGuid(),"Name 2", "Description 2", "Image 2", 010, 020, new Dimensions(030,040,050), new Category(Guid.NewGuid(),060, "Category 2")),
+                new Product(Guid.NewGuid(),"Name 3", "Description 3", "Image 3", 100, 200, new Dimensions(300,400,500), new Category(Guid.NewGuid(),600, "Category 3")),
             };
 
             var productRepositoryMock = new Mock<IProductRepository>();
@@ -71,9 +70,9 @@ namespace NerdStore.Catalog.App.Test
         {
             var categories = new List<Category> 
             { 
-                new Category(1, "Name 1"),
-                new Category(2, "Name 2"),
-                new Category(3, "Name 3")
+                new Category(Guid.NewGuid(),1, "Name 1"),
+                new Category(Guid.NewGuid(),2, "Name 2"),
+                new Category(Guid.NewGuid(),3, "Name 3")
             };
 
             var productRepositoryMock = new Mock<IProductRepository>();
@@ -89,7 +88,7 @@ namespace NerdStore.Catalog.App.Test
         [Fact]
         public void AddTest()
         {
-            var product = new Product("Name", "Description", "Image", 1, 20, new Dimensions(3, 4, 5), new Category(6, "Category"));
+            var product = new Product(Guid.NewGuid(), "Name", "Description", "Image", 1, 20, new Dimensions(3, 4, 5), new Category(Guid.NewGuid(), 6, "Category"));
 
             var productRepositoryMock = new Mock<IProductRepository>();
             productRepositoryMock.Setup(x => x.Add(It.IsAny<Product>()));
@@ -106,7 +105,7 @@ namespace NerdStore.Catalog.App.Test
         [Fact]
         public void UpdateTest()
         {
-            var product = new Product("Name", "Description", "Image", 1, 20, new Dimensions(3, 4, 5), new Category(6, "Category"));
+            var product = new Product(Guid.NewGuid(), "Name", "Description", "Image", 1, 20, new Dimensions(3, 4, 5), new Category(Guid.NewGuid(), 6, "Category"));
 
             var productRepositoryMock = new Mock<IProductRepository>();
             productRepositoryMock.Setup(x => x.Add(It.IsAny<Product>()));
@@ -123,7 +122,7 @@ namespace NerdStore.Catalog.App.Test
         [Fact]
         public async void ReplenishStockTest()
         {
-            var product = new Product("Name", "Description", "Image", 1, 20, new Dimensions(3, 4, 5), new Category(6, "Category"));
+            var product = new Product(Guid.NewGuid(), "Name", "Description", "Image", 1, 20, new Dimensions(3, 4, 5), new Category(Guid.NewGuid(), 6, "Category"));
 
             var productRepositoryMock = new Mock<IProductRepository>();
             productRepositoryMock.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(product);
@@ -142,7 +141,7 @@ namespace NerdStore.Catalog.App.Test
         [Fact]
         public async void WithdrawFromStockTest()
         {
-            var product = new Product("Name", "Description", "Image", 1, 20, new Dimensions(3, 4, 5), new Category(6, "Category"));
+            var product = new Product(Guid.NewGuid(), "Name", "Description", "Image", 1, 20, new Dimensions(3, 4, 5), new Category(Guid.NewGuid(), 6, "Category"));
 
             var productRepositoryMock = new Mock<IProductRepository>();
             productRepositoryMock.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(product);

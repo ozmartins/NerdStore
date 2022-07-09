@@ -1,5 +1,4 @@
-﻿using NerdStore.Catalog.Domain;
-using NerdStore.Catalog.Domain.Entities;
+﻿using NerdStore.Catalog.Domain.Entities;
 using NerdStore.Catalog.Domain.Interfaces;
 
 namespace NerdStore.Catalog.App

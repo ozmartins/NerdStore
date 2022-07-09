@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using NerdStore.Catalog.Domain.Entities;
+using NerdStore.Core.DomainObjects;
 using System;
 using Xunit;
 
@@ -10,7 +11,7 @@ namespace NerdStore.Catalog.Domain.Test.Entities
         [Fact]
         public void CreateProductWithInvalidName()
         {            
-            var exception = Assert.Throws<Exception>(() => new Product(string.Empty, "Test", "Test", 1, 1, new Dimensions(1,1,1), new Category(1,"Test")));
+            var exception = Assert.Throws<DomainException>(() => new Product(Guid.NewGuid(), string.Empty, "Test", "Test", 1, 1, new Dimensions(1,1,1), new Category(Guid.NewGuid(), 1,"Test")));
 
             exception.Message.Should().Be("Name can't be empty.");
         }
@@ -18,7 +19,7 @@ namespace NerdStore.Catalog.Domain.Test.Entities
         [Fact]
         public void CreateProductWithInvalidDescription()
         {
-            var exception = Assert.Throws<Exception>(() => new Product("Test", string.Empty, "Test", 1, 1, new Dimensions(1, 1, 1), new Category(1, "Test")));
+            var exception = Assert.Throws<DomainException>(() => new Product(Guid.NewGuid(), "Test", string.Empty, "Test", 1, 1, new Dimensions(1, 1, 1), new Category(Guid.NewGuid(), 1, "Test")));
 
             exception.Message.Should().Be("Description can't be empty.");
         }
@@ -26,7 +27,7 @@ namespace NerdStore.Catalog.Domain.Test.Entities
         [Fact]
         public void CreateProductWithInvalidImage()
         {
-            var exception = Assert.Throws<Exception>(() => new Product("Test", "Test", string.Empty, 1, 1, new Dimensions(1, 1, 1), new Category(1, "Test")));
+            var exception = Assert.Throws<DomainException>(() => new Product(Guid.NewGuid(), "Test", "Test", string.Empty, 1, 1, new Dimensions(1, 1, 1), new Category(Guid.NewGuid(), 1, "Test")));
 
             exception.Message.Should().Be("Image can't be empty.");
         }
@@ -34,7 +35,7 @@ namespace NerdStore.Catalog.Domain.Test.Entities
         [Fact]
         public void CreateProductWithInvalidPrice()
         {
-            var exception = Assert.Throws<Exception>(() => new Product("Test", "Test", "Test", 0, 1, new Dimensions(1, 1, 1), new Category(1, "Test")));
+            var exception = Assert.Throws<DomainException>(() => new Product(Guid.NewGuid(), "Test", "Test", "Test", 0, 1, new Dimensions(1, 1, 1), new Category(Guid.NewGuid(), 1, "Test")));
 
             exception.Message.Should().Be("Price must to be greater than zero.");
         }
@@ -42,7 +43,7 @@ namespace NerdStore.Catalog.Domain.Test.Entities
         [Fact]
         public void CreateProductWithInvalidQuantity()
         {
-            var exception = Assert.Throws<Exception>(() => new Product("Test", "Test", "Test", 1, -1, new Dimensions(1, 1, 1), new Category(1, "Test")));
+            var exception = Assert.Throws<DomainException>(() => new Product(Guid.NewGuid(), "Test", "Test", "Test", 1, -1, new Dimensions(1, 1, 1), new Category(Guid.NewGuid(), 1, "Test")));
 
             exception.Message.Should().Be("Quantity must to be greater than zero.");
         }
@@ -50,7 +51,7 @@ namespace NerdStore.Catalog.Domain.Test.Entities
         [Fact]
         public void CreateProductWithInvalidCategory()
         {
-            var exception = Assert.Throws<Exception>(() => new Product("Test", "Test", "Test", 1, 1, new Dimensions(1, 1, 1), null!));
+            var exception = Assert.Throws<DomainException>(() => new Product(Guid.NewGuid(), "Test", "Test", "Test", 1, 1, new Dimensions(1, 1, 1), null!));
 
             exception.Message.Should().Be("Category can't be empty.");
         }
@@ -58,7 +59,7 @@ namespace NerdStore.Catalog.Domain.Test.Entities
         [Fact]
         public void CreateValidProduct()
         {
-            var product = new Product("Name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(6, "Test"));
+            var product = new Product(Guid.NewGuid(), "Name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(Guid.NewGuid(), 6, "Test"));
 
             product.Name.Should().Be("Name");
             product.Description.Should().Be("Description");
@@ -70,12 +71,12 @@ namespace NerdStore.Catalog.Domain.Test.Entities
             product.Dimensions.Depth.Should().Be(5);
             product.Category.Code.Should().Be(6);
             product.Category.Name.Should().Be("Test");
-        }        
+        }      
 
         [Fact]
         public void DeactivateActivateProduct()
         {
-            var product = new Product("Name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(6, "Test"));
+            var product = new Product(Guid.NewGuid(), "Name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(Guid.NewGuid(), 6, "Test"));
 
             product.Deactivate();
             product.Active.Should().Be(false);
@@ -87,9 +88,9 @@ namespace NerdStore.Catalog.Domain.Test.Entities
         [Fact]
         public void ChangeDescriptionUsingInvalidDescription()
         {
-            var product = new Product("Name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(6, "Test"));
+            var product = new Product(Guid.NewGuid(), "Name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(Guid.NewGuid(), 6, "Test"));
 
-            var exception = Assert.Throws<Exception>(() => product.ChangeDescription(string.Empty));
+            var exception = Assert.Throws<DomainException>(() => product.ChangeDescription(string.Empty));
 
             exception.Message.Should().Be("Description can't be empty.");
         }
@@ -97,7 +98,7 @@ namespace NerdStore.Catalog.Domain.Test.Entities
         [Fact]
         public void ChangeDescriptionUsingValidDescription()
         {
-            var product = new Product("Name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(6, "Test"));
+            var product = new Product(Guid.NewGuid(), "Name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(Guid.NewGuid(), 6, "Test"));
 
             product.ChangeDescription("New description");
 
@@ -107,9 +108,9 @@ namespace NerdStore.Catalog.Domain.Test.Entities
         [Fact]
         public void ChangeCategoryUsingNullCategory()
         {
-            var product = new Product("Name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(6, "Test"));
+            var product = new Product(Guid.NewGuid(), "Name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(Guid.NewGuid(), 6, "Test"));
 
-            var exception = Assert.Throws<Exception>(() => product.ChangeCategory(null!));
+            var exception = Assert.Throws<DomainException>(() => product.ChangeCategory(null!));
 
             exception.Message.Should().Be("Category can't be empty.");
         }
@@ -117,12 +118,47 @@ namespace NerdStore.Catalog.Domain.Test.Entities
         [Fact]
         public void ChangeCategoryUsingValidCategory()
         {
-            var product = new Product("Name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(6, "Test"));
+            var product = new Product(Guid.NewGuid(), "Name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(Guid.NewGuid(), 6, "Test"));
 
-            product.ChangeCategory(new Category(7, "New category"));
+            product.ChangeCategory(new Category(Guid.NewGuid(), 7, "New category"));
 
             product.Category.Code.Should().Be(7);
             product.Category.Name.Should().Be("New category");
+        }
+
+        [Fact]
+        public void CompareProdutcsWithDifferentIds()
+        {
+            var product1 = new Product(Guid.NewGuid(), "Name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(Guid.NewGuid(), 6, "Test"));            
+            product1.ChangeCategory(new Category(Guid.NewGuid(), 7, "New category"));
+            product1.Category.Code.Should().Be(7);
+            product1.Category.Name.Should().Be("New category");
+
+            var product2 = new Product(Guid.NewGuid(), "Name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(Guid.NewGuid(), 6, "Test"));
+            product2.ChangeCategory(new Category(Guid.NewGuid(), 7, "New category"));
+            product2.Category.Code.Should().Be(7);
+            product2.Category.Name.Should().Be("New category");
+
+            product1.Equals(product2).Should().BeFalse();
+        }
+
+        [Fact]
+        public void CompareProdutcsWithItself()
+        {
+            var product1 = new Product(Guid.NewGuid(), "Name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(Guid.NewGuid(), 6, "Test"));
+            product1.ChangeCategory(new Category(Guid.NewGuid(), 7, "New category"));
+            product1.Category.Code.Should().Be(7);
+            product1.Category.Name.Should().Be("New category");            
+
+            product1.Equals(product1).Should().BeTrue();
+        }
+
+        [Fact]
+        public void GetHashCodeThrowsException()
+        {
+            var product = new Product(Guid.NewGuid(), "Name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(Guid.NewGuid(), 6, "Test"));
+
+            Assert.Throws<NotImplementedException>(() => product.GetHashCode());
         }
     }
 }

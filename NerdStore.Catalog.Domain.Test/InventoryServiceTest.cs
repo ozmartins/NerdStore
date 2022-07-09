@@ -46,7 +46,7 @@ namespace NerdStore.Catalog.Domain.Test
         [Fact]
         public async void ReplenishStockWithValidProduct()
         {
-            var product = new Product("Product name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(6, "Category name"));
+            var product = new Product(Guid.NewGuid(), "Product name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(Guid.NewGuid(), 6, "Category name"));
 
             var productRepositoryMock = new Mock<IProductRepository>();
             productRepositoryMock.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(product);
@@ -96,7 +96,7 @@ namespace NerdStore.Catalog.Domain.Test
         [Fact]
         public async void WithdrawFromStockWithValidProduct()
         {
-            var product = new Product("Product name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(6, "Category name"));
+            var product = new Product(Guid.NewGuid(), "Product name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(Guid.NewGuid(), 6, "Category name"));
 
             var productRepositoryMock = new Mock<IProductRepository>();
             productRepositoryMock.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(product);
@@ -113,7 +113,7 @@ namespace NerdStore.Catalog.Domain.Test
         [Fact]
         public async void WithdrawFromStockWithValidProductAndConsumingTheWholeStock()
         {
-            var product = new Product("Product name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(6, "Category name"));
+            var product = new Product(Guid.NewGuid(), "Product name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(Guid.NewGuid(), 6, "Category name"));
 
             var productRepositoryMock = new Mock<IProductRepository>();
             productRepositoryMock.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(product);
@@ -134,7 +134,7 @@ namespace NerdStore.Catalog.Domain.Test
         [Fact]
         public void WithdrawFromStockWithValidProductAndConsumingMoreThanIsAvaliable()
         {
-            var product = new Product("Product name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(6, "Category name"));
+            var product = new Product(Guid.NewGuid(), "Product name", "Description", "Image", 1, 2, new Dimensions(3, 4, 5), new Category(Guid.NewGuid(), 6, "Category name"));
 
             var productRepositoryMock = new Mock<IProductRepository>();
             productRepositoryMock.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(product);

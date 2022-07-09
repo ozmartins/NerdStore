@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using NerdStore.Catalog.Domain.Entities;
-using System;
+using NerdStore.Core.DomainObjects;
 using Xunit;
 
 namespace NerdStore.Catalog.Domain.Test.Entities
@@ -10,7 +10,7 @@ namespace NerdStore.Catalog.Domain.Test.Entities
         [Fact]
         public void CreateDimensionsWithInvalidHeight()
         {            
-            var exception = Assert.Throws<Exception>(() => new Dimensions(0, 1, 1));
+            var exception = Assert.Throws<DomainException>(() => new Dimensions(0, 1, 1));
 
             exception.Message.Should().Be("Height cant't be less than one.");
         }
@@ -18,7 +18,7 @@ namespace NerdStore.Catalog.Domain.Test.Entities
         [Fact]
         public void CreateDimensionsWithInvalidWidth()
         {
-            var exception = Assert.Throws<Exception>(() => new Dimensions(1, 0, 1));
+            var exception = Assert.Throws<DomainException>(() => new Dimensions(1, 0, 1));
 
             exception.Message.Should().Be("Width cant't be less than one.");
         }
@@ -26,7 +26,7 @@ namespace NerdStore.Catalog.Domain.Test.Entities
         [Fact]
         public void CreateDimensionsWithInvalidDepth()
         {
-            var exception = Assert.Throws<Exception>(() => new Dimensions(1, 1, 0));
+            var exception = Assert.Throws<DomainException>(() => new Dimensions(1, 1, 0));
 
             exception.Message.Should().Be("Depth cant't be less than one.");
         }

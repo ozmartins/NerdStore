@@ -12,7 +12,7 @@ namespace NerdStore.Core.Test.DomainObjects
         {
             object object1 = null!;
 
-            var exception = Assert.Throws<Exception>(() => object1.ExceptionIfNull("TestException"));
+            var exception = Assert.Throws<DomainException>(() => object1.ExceptionIfNull("TestException"));
 
             exception.Message.Should().Be("TestException");
         }
@@ -26,7 +26,7 @@ namespace NerdStore.Core.Test.DomainObjects
         [Fact]
         public void WhenCallExceptionIfEmptyUsingEmptyStringShouldThrownException()
         {            
-            var exception = Assert.Throws<Exception>(() => string.Empty.ExceptionIfEmpty("TestException"));
+            var exception = Assert.Throws<DomainException>(() => string.Empty.ExceptionIfEmpty("TestException"));
 
             exception.Message.Should().Be("TestException");
         }
@@ -40,7 +40,7 @@ namespace NerdStore.Core.Test.DomainObjects
         [Fact]
         public void WhenCallExceptionIfEmptyUsingEmptyGuidShouldThrownException()
         {            
-            var exception = Assert.Throws<Exception>(() => Guid.Empty.ExceptionIfEmpty("TestException"));
+            var exception = Assert.Throws<DomainException>(() => Guid.Empty.ExceptionIfEmpty("TestException"));
 
             exception.Message.Should().Be("TestException");
         }
@@ -56,7 +56,7 @@ namespace NerdStore.Core.Test.DomainObjects
         {
             var number = 0;
 
-            var exception = Assert.Throws<Exception>(() => number.ExceptionIfLessThan(1, "TestException"));
+            var exception = Assert.Throws<DomainException>(() => number.ExceptionIfLessThan(1, "TestException"));
 
             exception.Message.Should().Be("TestException");
         }
@@ -74,7 +74,7 @@ namespace NerdStore.Core.Test.DomainObjects
         {
             var number = 0.0m;
 
-            var exception = Assert.Throws<Exception>(() => number.ExceptionIfLessThan(0.1m, "TestException"));
+            var exception = Assert.Throws<DomainException>(() => number.ExceptionIfLessThan(0.1m, "TestException"));
 
             exception.Message.Should().Be("TestException");
         }
@@ -92,7 +92,7 @@ namespace NerdStore.Core.Test.DomainObjects
         {
             var number = 1;
 
-            var exception = Assert.Throws<Exception>(() => number.ExceptionIfEqualOrLessThan(1, "TestException"));
+            var exception = Assert.Throws<DomainException>(() => number.ExceptionIfEqualOrLessThan(1, "TestException"));
 
             exception.Message.Should().Be("TestException");
         }
@@ -102,7 +102,7 @@ namespace NerdStore.Core.Test.DomainObjects
         {
             var number = 0;
 
-            var exception = Assert.Throws<Exception>(() => number.ExceptionIfEqualOrLessThan(1, "TestException"));
+            var exception = Assert.Throws<DomainException>(() => number.ExceptionIfEqualOrLessThan(1, "TestException"));
 
             exception.Message.Should().Be("TestException");
         }
