@@ -16,7 +16,9 @@ namespace NerdStore.Catalog.Data
         {
         }
 
-        public CatalogContext(DbContextOptions options) : base(options) { }        
+        public CatalogContext(DbContextOptions options) : base(options)
+        {
+        }        
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,8 +28,8 @@ namespace NerdStore.Catalog.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
-            .UseLoggerFactory(LoggerFactory.Create(x => x.AddConsole()))
-            .EnableSensitiveDataLogging();
+                .UseLoggerFactory(LoggerFactory.Create(x => x.AddConsole()))
+                .EnableSensitiveDataLogging();
         }
     }
 }
