@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using NerdStore.Catalog.Data.Models;
 using NerdStore.Catalog.Domain.Entities;
 using NerdStore.Catalog.Domain.Interfaces;
-using System.Linq;
 
 namespace NerdStore.Catalog.Data.Repositories
 {
@@ -37,11 +36,13 @@ namespace NerdStore.Catalog.Data.Repositories
 
         public async Task<IEnumerable<Product>> GetByCategory(Guid categoryId)
         {
-            return _mapper
-                .Map<IEnumerable<Product>>(await _catalogContext.Products!
-                .AsNoTracking()
-                .Where(x => x.Category!.Id == categoryId)
-                .ToListAsync());
+            var products = await _catalogContext.Products!
+                    .AsNoTracking()
+                    .Include(x => x.Category)
+                    .Where(x => x.Category!.Id.Equals(categoryId))
+                    .ToListAsync();
+
+            return _mapper.Map<IEnumerable<Product>>(products);
         }
 
         public async Task<Product> GetById(Guid id)
@@ -69,8 +70,6 @@ namespace NerdStore.Catalog.Data.Repositories
         public void Update(Product product)
         {
             var savedProductModel = _catalogContext.Products!.Find(product.Id);
-
-            var mappedProductModel = _mapper.Map<ProductModel>(product);
 
             _catalogContext.Entry(savedProductModel!).CurrentValues.SetValues(product); //update just the changed fields.
         }

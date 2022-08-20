@@ -1,15 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NerdStore.Catalog.Data.Models;
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace NerdStore.Catalog.Data
 {
+    [ExcludeFromCodeCoverage]
     public class CatalogContext : DbContext
     {
-        public DbSet<ProductModel>? Products { get; private set; }
-        public DbSet<CategoryModel>? Categories { get; private set; }
+        public DbSet<ProductModel>? Products { get; set; }
+        public DbSet<CategoryModel>? Categories { get; set; }
 
-        public CatalogContext() : base() { }
+        public CatalogContext()
+        {
+        }
 
         public CatalogContext(DbContextOptions options) : base(options) { }        
         

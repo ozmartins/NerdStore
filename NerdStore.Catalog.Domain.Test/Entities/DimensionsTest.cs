@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using NerdStore.Catalog.Domain.Entities;
 using NerdStore.Core.DomainObjects;
 using Xunit;
@@ -40,5 +41,15 @@ namespace NerdStore.Catalog.Domain.Test.Entities
             dimension.Width.Should().Be(2);
             dimension.Depth.Should().Be(3);
         }
+        [Fact]
+        public void GetDimensionsHashCode()
+        {
+            var dimension = new Dimensions(1, 2, 3);
+
+            var hash = dimension.GetHashCode();
+
+            hash.Should().Be(HashCode.Combine(1,2,3));
+        }
+
     }
 }

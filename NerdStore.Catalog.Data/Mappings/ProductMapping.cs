@@ -12,11 +12,11 @@ namespace NerdStore.Catalog.Data.Mappings
 
             builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.Name).IsRequired().HasColumnType("varchar(250)");
+            builder.Property(x => x.Name).IsRequired().HasMaxLength(250);
 
-            builder.Property(x => x.Description).IsRequired().HasColumnType("varchar(500)");
+            builder.Property(x => x.Description).IsRequired().HasMaxLength(500);
 
-            builder.Property(x => x.Image).IsRequired().HasColumnType("varchar(250)");
+            builder.Property(x => x.Image).IsRequired().HasMaxLength(250);
 
             builder.Property(x => x.Active).IsRequired();
             

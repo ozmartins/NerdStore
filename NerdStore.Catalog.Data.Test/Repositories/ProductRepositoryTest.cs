@@ -3,7 +3,6 @@ using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using NerdStore.Catalog.Data.Models;
 using NerdStore.Catalog.Data.Repositories;
 using NerdStore.Catalog.Domain.Entities;
 using System;
@@ -37,15 +36,18 @@ namespace NerdStore.Catalog.Data.Test.Repositories
 
             var context = new CatalogContext(contextOptions);
 
-            context.Database.EnsureCreated();
+            await context.Database.EnsureCreatedAsync();
 
             var category1 = new Category(Guid.NewGuid(), 006, "Category");
             var category2 = new Category(Guid.NewGuid(), 060, "Category");
             var category3 = new Category(Guid.NewGuid(), 600, "Category");
 
-            var product1 = new Product(Guid.NewGuid(), "Name1", "Description1", "Image1", 001, 002, new Dimensions(003, 004, 005), category1);
-            var product2 = new Product(Guid.NewGuid(), "Name2", "Description2", "Image2", 010, 020, new Dimensions(030, 040, 050), category2);
-            var product3 = new Product(Guid.NewGuid(), "Name3", "Description3", "Image3", 100, 200, new Dimensions(300, 400, 500), category3);
+            var product1 = new Product(Guid.NewGuid(), "Name1", "Description1", "Image1", 001, 002,
+                new Dimensions(003, 004, 005), category1);
+            var product2 = new Product(Guid.NewGuid(), "Name2", "Description2", "Image2", 010, 020,
+                new Dimensions(030, 040, 050), category2);
+            var product3 = new Product(Guid.NewGuid(), "Name3", "Description3", "Image3", 100, 200,
+                new Dimensions(300, 400, 500), category3);
 
             var productRepository = new ProductRepository(context, _mapper);
 
@@ -55,11 +57,11 @@ namespace NerdStore.Catalog.Data.Test.Repositories
 
             await productRepository.Commit();
 
-            var productList = await productRepository.GetAll();
+            var productList = (await productRepository.GetAll()).OrderBy(x => x.Name).ToList();
 
-            productList.ElementAt(0).Equals(product1);
-            productList.ElementAt(1).Equals(product2);
-            productList.ElementAt(2).Equals(product3);
+            productList.ElementAt(0).Id.Should().Be(product1.Id);
+            productList.ElementAt(1).Id.Should().Be(product2.Id);
+            productList.ElementAt(2).Id.Should().Be(product3.Id);
         }
 
         [Fact]
@@ -72,11 +74,14 @@ namespace NerdStore.Catalog.Data.Test.Repositories
 
             var context = new CatalogContext(contextOptions);
 
-            context.Database.EnsureCreated();
+            await context.Database.EnsureCreatedAsync();
 
-            var product1 = new Product(Guid.NewGuid(), "Name1", "Description1", "Image1", 001, 002, new Dimensions(003, 004, 005), new Category(Guid.NewGuid(), 006, "Category"));
-            var product2 = new Product(Guid.NewGuid(), "Name2", "Description2", "Image2", 010, 020, new Dimensions(030, 040, 050), new Category(Guid.NewGuid(), 060, "Category"));
-            var product3 = new Product(Guid.NewGuid(), "Name3", "Description3", "Image3", 100, 200, new Dimensions(300, 400, 500), new Category(Guid.NewGuid(), 600, "Category"));
+            var product1 = new Product(Guid.NewGuid(), "Name1", "Description1", "Image1", 001, 002,
+                new Dimensions(003, 004, 005), new Category(Guid.NewGuid(), 006, "Category"));
+            var product2 = new Product(Guid.NewGuid(), "Name2", "Description2", "Image2", 010, 020,
+                new Dimensions(030, 040, 050), new Category(Guid.NewGuid(), 060, "Category"));
+            var product3 = new Product(Guid.NewGuid(), "Name3", "Description3", "Image3", 100, 200,
+                new Dimensions(300, 400, 500), new Category(Guid.NewGuid(), 600, "Category"));
 
             var productRepository = new ProductRepository(context, _mapper);
 
@@ -108,14 +113,14 @@ namespace NerdStore.Catalog.Data.Test.Repositories
             var changedProduct2 = await productRepository.GetById(product2.Id);
             var changedProduct3 = await productRepository.GetById(product3.Id);
 
-            changedProduct1.Equals(product1);
-            changedProduct2.Equals(product2);
-            changedProduct3.Equals(product3);
+            changedProduct1.Id.Should().Be(product1.Id);
+            changedProduct2.Id.Should().Be(product2.Id);
+            changedProduct3.Id.Should().Be(product3.Id);
         }
 
         [Fact]
         public async void AddCategoryTest()
-        {           
+        {
             var connection = new SqliteConnection("Filename=:memory:");
             connection.Open();
 
@@ -123,7 +128,7 @@ namespace NerdStore.Catalog.Data.Test.Repositories
 
             var context = new CatalogContext(contextOptions);
 
-            context.Database.EnsureCreated();
+            await context.Database.EnsureCreatedAsync();
 
             var category = new Category(Guid.NewGuid(), 1, "Category");
 
@@ -132,10 +137,41 @@ namespace NerdStore.Catalog.Data.Test.Repositories
             productRepository.Add(category);
             await productRepository.Commit();
 
-            var foundCategories = await productRepository.GetCategories();
+            var foundCategories = (await productRepository.GetCategories()).ToList();
 
-            foundCategories.Count().Should().Be(1);
-            foundCategories.First().Equals(category);
-        }        
+            foundCategories.Should().HaveCount(1);
+            foundCategories.First().Should().BeEquivalentTo(category);
+        }
+
+        [Fact]
+        public async void GetByCategoriesTest()
+        {
+            var connection = new SqliteConnection("Filename=:memory:");
+            connection.Open();
+
+            var contextOptions = new DbContextOptionsBuilder<CatalogContext>().UseSqlite(connection).Options;
+
+            var context = new CatalogContext(contextOptions);
+
+            await context.Database.EnsureCreatedAsync();
+
+            var category1 = new Category(Guid.NewGuid(), 6, "Categoria 1");
+            var category2 = new Category(Guid.NewGuid(), 6, "Categoria 2");
+
+            var product1 = new Product(Guid.NewGuid(), "Nome 1", "Descrição 1", "Image 1", 1.0m, 2, new Dimensions(3, 4, 5), category1);
+            var product2 = new Product(Guid.NewGuid(), "Nome 2", "Descrição 2", "Image 2", 1.0m, 2, new Dimensions(3, 4, 5), category2);
+
+            var productRepository = new ProductRepository(context, _mapper);
+
+            productRepository.Add(product1);
+            productRepository.Add(product2);
+
+            await productRepository.Commit();
+
+            var foundProduct = (await productRepository.GetByCategory(category1.Id)).ToList();
+
+            foundProduct.Should().HaveCount(1);
+            foundProduct.First().Id.Should().Be(product1.Id);
+        }
     }
 }

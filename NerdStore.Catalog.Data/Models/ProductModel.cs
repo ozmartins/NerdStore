@@ -1,5 +1,8 @@
-﻿namespace NerdStore.Catalog.Data.Models
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace NerdStore.Catalog.Data.Models
 {
+    [ExcludeFromCodeCoverage]
     public class ProductModel
     {
         public Guid Id { get; set; }

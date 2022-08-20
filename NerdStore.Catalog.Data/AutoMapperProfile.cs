@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
 using NerdStore.Catalog.Data.Models;
 using NerdStore.Catalog.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NerdStore.Catalog.Data
 {
