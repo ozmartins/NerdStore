@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NerdStore.Catalog.Data.Models;
 // ReSharper disable UnusedAutoPropertyAccessor.Global
@@ -12,13 +13,9 @@ namespace NerdStore.Catalog.Data
         public DbSet<ProductModel>? Products { get; set; }
         public DbSet<CategoryModel>? Categories { get; set; }
 
-        public CatalogContext()
+        public CatalogContext(DbContextOptions<CatalogContext> options) : base(options)
         {
         }
-
-        public CatalogContext(DbContextOptions options) : base(options)
-        {
-        }        
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,8 +25,8 @@ namespace NerdStore.Catalog.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
-                .UseLoggerFactory(LoggerFactory.Create(x => x.AddConsole()))
-                .EnableSensitiveDataLogging();
+                .UseLoggerFactory(LoggerFactory.Create(x => x.AddConsole()));
+            //.EnableSensitiveDataLogging();
         }
     }
 }

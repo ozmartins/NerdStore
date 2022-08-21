@@ -20,7 +20,7 @@ namespace NerdStore.Catalog.Data.Mappings
 
             builder.Property(x => x.Active).IsRequired();
             
-            builder.Property(x => x.Price).IsRequired();
+            builder.Property(x => x.Price).IsRequired().HasPrecision(18,2);
             
             builder.Property(x => x.Quantity).IsRequired();
 
@@ -34,7 +34,7 @@ namespace NerdStore.Catalog.Data.Mappings
 
             builder.Property(x => x.CategoryId).IsRequired();
 
-            builder.HasOne(p => p.Category).WithMany(c => c.Products).HasForeignKey(p => p.CategoryId);
+            builder.HasOne(p => p.Category).WithMany(c => c.Products).HasForeignKey(p => p.CategoryId).OnDelete(DeleteBehavior.Restrict);
         }        
     }
 }
